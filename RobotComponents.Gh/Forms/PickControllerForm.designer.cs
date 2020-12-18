@@ -36,7 +36,7 @@ namespace RobotComponents.Gh.Forms
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.labelOperationMode = new System.Windows.Forms.Label();
+            this.labelVersion = new System.Windows.Forms.Label();
             this.labelIsVirtual = new System.Windows.Forms.Label();
             this.labelIP = new System.Windows.Forms.Label();
             this.labelSystemName = new System.Windows.Forms.Label();
@@ -45,7 +45,7 @@ namespace RobotComponents.Gh.Forms
             this.labelSystemNameInfo = new System.Windows.Forms.Label();
             this.labelIPInfo = new System.Windows.Forms.Label();
             this.labelIsVirtualInfo = new System.Windows.Forms.Label();
-            this.labelOperationModeInfo = new System.Windows.Forms.Label();
+            this.labelVersionInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -60,7 +60,7 @@ namespace RobotComponents.Gh.Forms
             this.button1.TabIndex = 1;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // label1
             // 
@@ -80,16 +80,16 @@ namespace RobotComponents.Gh.Forms
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(474, 21);
             this.comboBox1.TabIndex = 3;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged_1);
             // 
-            // labelOperationMode
+            // labelVesion
             // 
-            this.labelOperationMode.AutoSize = true;
-            this.labelOperationMode.Location = new System.Drawing.Point(13, 240);
-            this.labelOperationMode.Name = "labelOperationMode";
-            this.labelOperationMode.Size = new System.Drawing.Size(83, 13);
-            this.labelOperationMode.TabIndex = 17;
-            this.labelOperationMode.Text = "Operation Mode";
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Location = new System.Drawing.Point(13, 240);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(83, 13);
+            this.labelVersion.TabIndex = 17;
+            this.labelVersion.Text = "Version";
             // 
             // labelIsVirtual
             // 
@@ -163,14 +163,14 @@ namespace RobotComponents.Gh.Forms
             this.labelIsVirtualInfo.TabIndex = 21;
             this.labelIsVirtualInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // labelOperationModeInfo
+            // labelVersionInfo
             // 
-            this.labelOperationModeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelOperationModeInfo.Location = new System.Drawing.Point(203, 240);
-            this.labelOperationModeInfo.Name = "labelOperationModeInfo";
-            this.labelOperationModeInfo.Size = new System.Drawing.Size(282, 25);
-            this.labelOperationModeInfo.TabIndex = 22;
-            this.labelOperationModeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelVersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelVersionInfo.Location = new System.Drawing.Point(203, 240);
+            this.labelVersionInfo.Name = "labelOperationModeInfo";
+            this.labelVersionInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelVersionInfo.TabIndex = 22;
+            this.labelVersionInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
@@ -187,12 +187,12 @@ namespace RobotComponents.Gh.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
-            this.Controls.Add(this.labelOperationModeInfo);
+            this.Controls.Add(this.labelVersionInfo);
             this.Controls.Add(this.labelIsVirtualInfo);
             this.Controls.Add(this.labelIPInfo);
             this.Controls.Add(this.labelSystemNameInfo);
             this.Controls.Add(this.labelNameInfo);
-            this.Controls.Add(this.labelOperationMode);
+            this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.labelIsVirtual);
             this.Controls.Add(this.labelIP);
             this.Controls.Add(this.labelSystemName);
@@ -214,7 +214,7 @@ namespace RobotComponents.Gh.Forms
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label labelOperationMode;
+        private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelIsVirtual;
         private System.Windows.Forms.Label labelIP;
         private System.Windows.Forms.Label labelSystemName;
@@ -223,7 +223,7 @@ namespace RobotComponents.Gh.Forms
         private System.Windows.Forms.Label labelSystemNameInfo;
         private System.Windows.Forms.Label labelIPInfo;
         private System.Windows.Forms.Label labelIsVirtualInfo;
-        private System.Windows.Forms.Label labelOperationModeInfo;
+        private System.Windows.Forms.Label labelVersionInfo;
         private System.Windows.Forms.Label label2;
     }
 }

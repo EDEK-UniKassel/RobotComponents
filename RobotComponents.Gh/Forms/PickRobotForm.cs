@@ -40,12 +40,12 @@ namespace RobotComponents.Gh.Forms
 
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.labelNameInfo.Text = PickRobotForm.GetRobotPresetName(robotPresets[comboBox1.SelectedIndex]);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             RobotIndex = comboBox1.SelectedIndex;
             this.Close();

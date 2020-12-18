@@ -86,7 +86,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             _externalAxisValues.Clear();
 
             // Data needed for making the datatree with axis values
-            MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.GetController().MotionSystem.MechanicalUnits;
             int externalAxisValuesPath = 0;
             List<double> values;
             GH_Path path;

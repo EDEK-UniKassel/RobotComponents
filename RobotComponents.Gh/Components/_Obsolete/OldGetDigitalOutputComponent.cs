@@ -108,7 +108,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
 
             // Get controller and logon
-            _controller = controllerGoo.Value;
+            _controller = controllerGoo.Value.GetController();
             _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
 
             // Ouput variables
@@ -181,7 +181,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
 
             // Display the form with signal names and let the used pick one of the available signals
-            _pickedIndex = DisplayForm(signalNames);
+            _pickedIndex = DisplayForm(signalCollection);
 
             // Return the picked signals if the index number of the picked signal is valid
             if (_pickedIndex >= 0)
@@ -303,19 +303,19 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// <summary>
         /// Displays the form with the names of the digital outputs and returns the index of the picked one. 
         /// </summary>
-        /// <param name="IONames"> The list with names of the digital outputs. </param>
+        /// <param name="signals"> The signal colletion to pick form. </param>
         /// <returns></returns>
-        private int DisplayForm(List<string> IONames)
+        private int DisplayForm(SignalCollection signals)
         {
             // Create the form
-            PickDOForm frm = new PickDOForm(IONames);
+            PickSignalForm frm = new PickSignalForm(signals);
 
             // Displays the form
             Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
             frm.ShowDialog();
 
             // Returns the index of the picked item
-            return PickDOForm.SignalIndex;
+            return PickSignalForm.SignalIndex;
         }
 
         /// <summary>

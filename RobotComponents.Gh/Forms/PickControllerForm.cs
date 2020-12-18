@@ -5,28 +5,31 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-// RobotComponents Libs
-using RobotComponents.Gh.Components.ControllerUtility;
+// ABB Libs
+using ABB.Robotics.Controllers;
 
 namespace RobotComponents.Gh.Forms
 {
     public partial class PickControllerForm : Form
     {
         public static int StationIndex = 0;
+        private static ControllerInfo[] _controllers;
 
         public PickControllerForm()
         {
             InitializeComponent();
         }
 
-        public PickControllerForm(List<string> items)
+        public PickControllerForm(ControllerInfo[] controllers)
         {
             InitializeComponent();
-            for (int i = 0; i < items.Count; i++)
+
+            _controllers = controllers;
+            
+            for (int i = 0; i < _controllers.Length; i++)
             {
-                comboBox1.Items.Add(items[i]);
+                comboBox1.Items.Add(_controllers[i].Name);
             }
         }
 
@@ -35,19 +38,19 @@ namespace RobotComponents.Gh.Forms
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             StationIndex = comboBox1.SelectedIndex;
             this.Close();
         }
 
-        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].Name.ToString();
-            this.labelSystemNameInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].SystemName.ToString();
-            this.labelIPInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].IPAddress.ToString();
-            this.labelIsVirtualInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].IsVirtual.ToString();
-            this.labelOperationModeInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].OperatingMode.ToString();
+            this.labelNameInfo.Text = _controllers[comboBox1.SelectedIndex].Name.ToString();
+            this.labelSystemNameInfo.Text = _controllers[comboBox1.SelectedIndex].SystemName.ToString();
+            this.labelIPInfo.Text = _controllers[comboBox1.SelectedIndex].IPAddress.ToString();
+            this.labelIsVirtualInfo.Text = _controllers[comboBox1.SelectedIndex].IsVirtual.ToString();
+            this.labelVersionInfo.Text = _controllers[comboBox1.SelectedIndex].Version.ToString();
         }
     }
 }

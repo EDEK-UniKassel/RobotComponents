@@ -5,8 +5,8 @@
 
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
-// ABB Robotic Libs
-using ABB.Robotics.Controllers;
+// Robot Components Libs
+using RobotComponents.Controllers;
 
 namespace RobotComponents.Gh.Goos
 {
@@ -90,14 +90,7 @@ namespace RobotComponents.Gh.Goos
             }
             else
             {
-                if (Value.IsVirtual == true)
-                {
-                    return "Virtual controller (" + Value.Name + ")";
-                }
-                else
-                {
-                    return "Physical controller (" + Value.Name + ")";
-                }
+                return Value.ToString();
             }
         }
 

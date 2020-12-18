@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -15,7 +14,6 @@ using RobotComponents.Gh.Goos;
 using RobotComponents.Gh.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers;
-using ABB.Robotics.Controllers.Discovery;
 
 namespace RobotComponents.Gh.Components.ControllerUtility
 {
@@ -58,13 +56,11 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
+            // To do: replace generic parameter with a RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Resulting Robot Controller", GH_ParamAccess.item);
         }
 
         // Fields
-        private int _pickedIndex = 0;
-        private static List<Controller> _controllerInstance = new List<Controller>();
         private GH_Controller _controllerGoo;
         private bool _fromMenu = false;
 
@@ -80,18 +76,37 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             // Catch the input data
             if (!DA.GetData(0, ref update)) { return; }
 
+            // Initialize variables
+            RobotComponents.Controllers.Controller controller;
+
             // Pick a new controller when the input is toggled or the user selects one sfrom the menu
             if (update || _fromMenu)
             {
-                var controllerNow = GetController();
-                if (controllerNow != null)
+                // Get all the controllers in the network
+                ControllerInfo[] controllers = RobotComponents.Controllers.Controller.GetControllers();
+
+                if (controllers.Length == 0)
                 {
-                    _controllerGoo = new GH_Controller(controllerNow as Controller);
+                    controller = null;
+                    _controllerGoo = new GH_Controller();
+
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controllers found in the network. Did you connect to a controller?");
                 }
+
+                else if (controllers.Length == 1)
+                {
+                    controller = new RobotComponents.Controllers.Controller(controllers[0]);
+                    _controllerGoo = new GH_Controller(controller);
+                }
+
                 else
                 {
-                    return;
+                    int index = DisplayForm(controllers);
+                    controller = new RobotComponents.Controllers.Controller(controllers[index]);
+                    _controllerGoo = new GH_Controller(controller);
                 }
+
+                _fromMenu = false;
             }
 
             // Output
@@ -118,7 +133,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                 {
                     if (_controllerGoo.Value != null)
                     {
-                        Controller controller = _controllerGoo.Value;
+                        ABB.Robotics.Controllers.Controller controller = _controllerGoo.Value.GetController();
 
                         if (controller.Connected == true)
                         {
@@ -131,80 +146,16 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
         }
 
-        //  Additional methods
         #region additional methods
-        /// <summary>
-        /// Get the controller
-        /// </summary>
-        /// <returns> The picked controller. </returns>
-        private Controller GetController()
-        {
-            // Initiate and clear variables
-            _controllerInstance.Clear();
-            ControllerInfo[] controllers;
-            List<string> controllerNames = new List<string>() { };
-
-            // Scan for a network with controller
-            NetworkScanner scanner = new NetworkScanner();
-            scanner.Scan();
-
-            // Try to get the controllers from the netwerok
-            try
-            {
-                controllers = scanner.GetControllers();
-            }
-            // Else return no controllers
-            catch (Exception)
-            {
-                controllers = null;
-            }
-            
-            // Get the names of all the controllers in the scanned network
-            for (int i = 0; i < controllers.Length; i++)
-            {
-                _controllerInstance.Add(Controller.Connect(controllers[i], ConnectionType.Standalone));
-                controllerNames.Add(_controllerInstance[i].Name);
-            }
-
-            // Automatically pick the controller when one controller is available. 
-            if (controllerNames.Count == 1)
-            {
-                _pickedIndex = 0;
-            }
-            // Display the form and let the user pick a controller when more then one controller is available. 
-            else if (controllerNames.Count > 1)
-            {
-                // Display the form and return the index of the picked controller. 
-                _pickedIndex = DisplayForm(controllerNames);
-
-                // Return a null value when the picked index is incorrect. 
-                if (_pickedIndex < 0)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Station picked from menu!");
-                    return null;
-                }
-            }
-
-            // Return a null value when no controller was found
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Station found!");
-                return null;
-            }
-
-            // Select the picked controller
-            return _controllerInstance[_pickedIndex];
-        }
-
         /// <summary>
         /// This method displays the form and return the index number of the picked controlller.
         /// </summary>
-        /// <param name="controllerNames"> A list with controller names. </param>
+        /// <param name="controllers"> The controllers to pick from. </param>
         /// <returns> The index number of the picked controller. </returns>
-        private int DisplayForm(List<string> controllerNames)
+        private int DisplayForm(ControllerInfo[] controllers)
         {
             // Create the form with all the available controller names
-            PickControllerForm frm = new PickControllerForm(controllerNames);
+            PickControllerForm frm = new PickControllerForm(controllers);
 
             // Display the form
             Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
@@ -249,14 +200,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             _fromMenu = false;
         }
         #endregion
-
-        /// <summary>
-        /// List with all the ABB controllers in the network
-        /// </summary>
-        public static List<Controller> ControllerInstance
-        {
-            get { return _controllerInstance; }
-        }
 
         /// <summary>
         /// Provides an Icon for the component.

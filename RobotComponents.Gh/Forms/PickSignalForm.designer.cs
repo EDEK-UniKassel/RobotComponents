@@ -5,7 +5,7 @@
 
 namespace RobotComponents.Gh.Forms
 {
-    partial class PickDIForm
+    partial class PickSignalForm
     {
         /// <summary>
         /// Required designer variable.
@@ -58,7 +58,7 @@ namespace RobotComponents.Gh.Forms
             this.button1.TabIndex = 1;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // label1
             // 
@@ -66,9 +66,9 @@ namespace RobotComponents.Gh.Forms
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 17);
+            this.label1.Size = new System.Drawing.Size(124, 17);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a Signal";
+            this.label1.Text = "Choose a signal";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
@@ -78,7 +78,7 @@ namespace RobotComponents.Gh.Forms
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(476, 21);
             this.comboBox1.TabIndex = 3;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // labelName
             // 
@@ -186,7 +186,7 @@ namespace RobotComponents.Gh.Forms
             this.label2.TabIndex = 14;
             this.label2.Text = "Signal info";
             // 
-            // PickDIForm
+            // PickDOForm
             // 
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
@@ -205,7 +205,7 @@ namespace RobotComponents.Gh.Forms
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "PickDIForm";
+            this.Name = "PickDOForm";
             this.ResumeLayout(false);
             this.PerformLayout();
 

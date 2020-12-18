@@ -212,6 +212,12 @@
     <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
+    <Compile Include="Forms\PickSignalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PickSignalForm.designer.cs">
+      <DependentUpon>PickSignalForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PickRobotForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,20 +266,11 @@
     <Compile Include="Forms\PickControllerForm.designer.cs">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PickDIForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickDIForm.designer.cs">
-      <DependentUpon>PickDIForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PickDOForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickDOForm.designer.cs">
-      <DependentUpon>PickDOForm.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PickSignalForm.resx">
+      <DependentUpon>PickSignalForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PickRobotForm.resx">
       <DependentUpon>PickRobotForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -281,13 +278,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickDOForm.resx">
-      <DependentUpon>PickDOForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickDIForm.resx">
-      <DependentUpon>PickDIForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PickControllerForm.resx">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
@@ -500,6 +490,10 @@
     <None Include="Resources\Target_Icon_Old.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.Controllers\RobotComponents.Controllers.csproj">
+      <Project>{4ecbb7d1-189c-447c-a613-57e8c294c674}</Project>
+      <Name>RobotComponents.Controllers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RobotComponents.Gh.Goos\RobotComponents.Gh.Goos.csproj">
       <Project>{4853e4fa-0246-486c-9f1a-0620896690c3}</Project>
       <Name>RobotComponents.Gh.Goos</Name>

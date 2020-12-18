@@ -66,9 +66,9 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         }
 
         // Fields
+        private RobotComponents.Controllers.Controller _controller;
         private int _pickedIndex = 0;
         private static List<GH_Signal> _signalGooList = new List<GH_Signal>();
-        private Controller _controller = null;
         private string _currentSignalName = "";
         private Guid _currentGuid = Guid.Empty;
 
@@ -92,7 +92,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
 
             // Get controller and logon
             _controller = controllerGoo.Value;
-            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
+            _controller.LogOn();
 
             // Output variables
             GH_Signal signalGoo;
@@ -125,7 +125,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
 
             // Get the signal ins the robot controller
             SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
+            signalCollection = _controller.GetDigitalInputs();
 
             // Initate the list with signal names
             List<string> signalNames = new List<string>();
@@ -134,7 +134,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             for (int i = 0; i < signalCollection.Count; i++)
             {
                 // Check if there is write acces
-                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
+                if (_controller.GetController().Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
                     _signalGooList.Add(new GH_Signal(signalCollection[i] as DigitalSignal));
@@ -149,7 +149,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
 
             // Display the form with signal names and let the used pick one of the available signals
-            _pickedIndex = DisplayForm(signalNames);
+            _pickedIndex = DisplayForm(signalCollection);
 
             // Return the picked signals if the index number of the picked signal is valid
             if (_pickedIndex >= 0)
@@ -173,7 +173,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         private GH_Signal GetSignal(string name)
         {
             // Check if the signal name is valid. Only check if the name is valid if the controller or the signal name changed.
-            if (name != _currentSignalName || _controller.SystemId != _currentGuid)
+            if (name != _currentSignalName || _controller.GetController().SystemId != _currentGuid)
             {
                 if (!ValidSignal(name))
                 {
@@ -183,11 +183,11 @@ namespace RobotComponents.Gh.Components.ControllerUtility
 
                 // Update the current names
                 _currentSignalName = (string)name.Clone();
-                _currentGuid = new Guid(_controller.SystemId.ToString());
+                _currentGuid = new Guid(_controller.GetController().SystemId.ToString());
             }
 
             // Get the signal from the defined controller
-            DigitalSignal signal = _controller.IOSystem.GetSignal(name) as DigitalSignal;
+            DigitalSignal signal = _controller.GetController().IOSystem.GetSignal(name) as DigitalSignal;
 
             // Check for null return
             if (signal != null)
@@ -245,7 +245,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         {
             // Get the signals that are defined in the controller
             SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
+            signalCollection = _controller.GetController().IOSystem.GetSignals(IOFilterTypes.Input);
 
             // Initiate the list with signal names
             List<string> signalNames = new List<string>();
@@ -254,7 +254,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             for (int i = 0; i < signalCollection.Count; i++)
             {
                 // Check if there is write access
-                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
+                if (_controller.GetController().Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
                 }
@@ -270,19 +270,19 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// <summary>
         /// Displays the form with the names of the digital inputs and returns the index of the picked one. 
         /// </summary>
-        /// <param name="IONames"> The list with names of the digital inputs. </param>
+        /// <param name="signals"> The signal collections to pick from. </param>
         /// <returns></returns>
-        private int DisplayForm(List<string> IONames)
+        private int DisplayForm(SignalCollection signals)
         {
             // Create the form
-            PickDIForm frm = new PickDIForm(IONames);
+            PickSignalForm frm = new PickSignalForm(signals);
 
             // Displays the form
             Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
             frm.ShowDialog();
 
             // Returns the index of the picked item
-            return PickDIForm.SignalIndex;
+            return PickSignalForm.SignalIndex;
         }
 
         /// <summary>
@@ -319,14 +319,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             ExpireSolution(true);
         }
         #endregion
-
-        /// <summary>
-        /// The list with all the digital input signals
-        /// </summary>
-        public static List<GH_Signal> SignalGooList
-        {
-            get { return _signalGooList; }
-        }
 
         /// <summary>
         /// Provides an Icon for the component.

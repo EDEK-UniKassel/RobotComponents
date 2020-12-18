@@ -101,7 +101,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             List<Plane> planes = new List<Plane>();
 
             //  Get the mechanical units of the controller
-            MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.GetController().MotionSystem.MechanicalUnits;
             List<string> mechanicalUnitnames = new List<string>();
 
             // ABB coordinate system type

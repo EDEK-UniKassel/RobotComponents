@@ -106,7 +106,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             base.DestroyIconCache();
 
             // Get controller value
-            _controller = controllerGoo.Value;
+            _controller = controllerGoo.Value.GetController();
 
             // Connect
             if (connect)

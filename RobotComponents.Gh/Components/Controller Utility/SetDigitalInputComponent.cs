@@ -151,16 +151,12 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             SignalCollection signalCollection;
             signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
 
-            // Initate the list with signal names
-            List<string> signalNames = new List<string>();
-
             // Get all the signal names of available signals
             for (int i = 0; i < signalCollection.Count; i++)
             {
                 // Check if there is write acces
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
-                    signalNames.Add(signalCollection[i].Name);
                     _signalGooList.Add(new GH_Signal(signalCollection[i] as DigitalSignal));
                 }
             }

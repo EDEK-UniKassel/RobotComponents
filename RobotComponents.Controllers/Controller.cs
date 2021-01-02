@@ -22,6 +22,7 @@ namespace RobotComponents.Controllers
         private ABB.Robotics.Controllers.UserInfo _userInfo = UserInfo.DefaultUser;
         private string _userName = UserInfo.DefaultUser.Name;
         private string _password = UserInfo.DefaultUser.Password;
+        private readonly List<string> _logger = new List<string>();
         #endregion
 
         #region constructors
@@ -45,6 +46,12 @@ namespace RobotComponents.Controllers
             ControllerInfo[] controllers = scanner.GetControllers();
 
             return controllers;
+        }
+
+        private static string CurrentTime()
+        {
+            DateTime localDate = DateTime.Now;
+            return localDate.ToString();
         }
         #endregion
 
@@ -75,11 +82,13 @@ namespace RobotComponents.Controllers
             try
             {
                 _controller.Logon(_userInfo);
+                _logger.Add(System.String.Format("{0}: Log on with username {1} succeeded.", CurrentTime(), _userName));
                 return true;
             }
 
             catch
             {
+                _logger.Add(System.String.Format("{0}: Log on with username {1} failed.", CurrentTime(), _userName));
                 return false;
             }
         }
@@ -89,11 +98,13 @@ namespace RobotComponents.Controllers
             try
             {
                 _controller.Logoff();
+                _logger.Add(System.String.Format("{0}: Log off succeeded.", CurrentTime()));
                 return true;
             }
 
             catch
             {
+                _logger.Add(System.String.Format("{0}: Log off failed.", CurrentTime()));
                 return false;
             }
         }
@@ -115,6 +126,7 @@ namespace RobotComponents.Controllers
 
             catch
             {
+                _logger.Add(System.String.Format("{0}: Failed to dispose the controller object.", CurrentTime()));
                 return false;
             }
         }
@@ -125,6 +137,8 @@ namespace RobotComponents.Controllers
             _password = password;
             
             _userInfo = new UserInfo(_userName, _password);
+
+            _logger.Add(System.String.Format("{0}: Username set to {1}", CurrentTime(), _userName));
         }
 
         public void SetDefaultUser()
@@ -133,6 +147,8 @@ namespace RobotComponents.Controllers
 
             _userName = _userInfo.Name;
             _password = _userInfo.Password;
+
+            _logger.Add(System.String.Format("{0}: User Info set to DefaultUser.", CurrentTime()));
         }
 
         public SignalCollection GetAnalogOutputs()
@@ -187,37 +203,57 @@ namespace RobotComponents.Controllers
             return false; // Returns true on sucess
         }
 
-        public void RunProgram()
+        public bool RunProgram()
         {
             if (_controller.OperatingMode != ControllerOperatingMode.Auto)
             {
-                // TODO: Controller not set in automatic.;
+                _logger.Add(System.String.Format("{0}: Could not start the program. The controller is not set in automatic mode.", CurrentTime()));
+                return false;
             }
 
-            if (_controller.State != ControllerState.MotorsOn)
+            else if (_controller.State != ControllerState.MotorsOn)
             {
-                // TODO: "Motors are disabled.
+                _logger.Add(System.String.Format("{0}: Could not start the program. The motors are not on.", CurrentTime()));
+                return false;
             }
 
-            using (Mastership master = Mastership.Request(_controller))
+            else
             {
-                _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
-                master.Release();
+                using (Mastership master = Mastership.Request(_controller))
+                {
+                    _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
+                    master.Release();
+                }
+
+                _logger.Add(System.String.Format("{0}: Program started.", CurrentTime()));
+                return true;
             }
         }
 
-        public void StopProgram()
+        public bool StopProgram()
         {
             if (_controller.OperatingMode != ControllerOperatingMode.Auto)
             {
-                // TODO: Controller not set in automatic mode.
+                _logger.Add(System.String.Format("{0}: Could not stop the program. The controller is not set in automatic mode.", CurrentTime()));
+                return false;
             }
 
-            using (Mastership master = Mastership.Request(_controller))
+            else
             {
-                _controller.Rapid.Stop(StopMode.Instruction);
-                master.Release();
+                using (Mastership master = Mastership.Request(_controller))
+                {
+                    _controller.Rapid.Stop(StopMode.Instruction);
+                    master.Release();
+                }
+
+                _logger.Add(System.String.Format("{0}: Program stopped.", CurrentTime()));
+                return false;
             }
+        }
+
+        public void ResetLogger()
+        {
+            _logger.Clear();
         }
         #endregion
 
@@ -244,6 +280,11 @@ namespace RobotComponents.Controllers
         public UserInfo UserInfo
         {
             get { return _userInfo; }
+        }
+
+        public List<string> Logger
+        {
+            get { return _logger; }
         }
         #endregion
     }

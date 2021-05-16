@@ -49,6 +49,9 @@ namespace RobotComponents.Gh.Components.Deconstruct
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Mass", "M", "The weight of the load in kg as a Number", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Center of Gravity", "CG", "The center of gravity of the toal load as a Plane.", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Moment of Inertia", "MI", "Moment of intertia of the load in kgm2 as a Vector.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -74,6 +77,9 @@ namespace RobotComponents.Gh.Components.Deconstruct
             DA.SetData(1, robotTool.Mesh);
             DA.SetData(2, robotTool.AttachmentPlane);
             DA.SetData(3, robotTool.ToolPlane);
+            DA.SetData(4, robotTool.Mass);
+            DA.SetData(5, robotTool.CenterOfGravity);
+            DA.SetData(6, robotTool.Inertia);
         }
 
         #region menu item
@@ -120,8 +126,8 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid
-        {
-            get { return new Guid("786e8c00-f24e-4dda-953d-cc8cffefa131"); }
+        { 
+            get { return new Guid("830CC56C-ACEB-448D-A513-89AAA5414145"); }
         }
     }
 }
